@@ -58,7 +58,9 @@ class Login extends Controller
             }
         }
     }
-    public function outlogin(){
-
+    public function loginout(){
+        Cookie::delete("admin");
+        Session::delete("admin");
+        $this->success("退出成功","login/login");
     }
 }
