@@ -3,7 +3,7 @@ namespace app\admin\controller;
 use think\Controller;
 use think\Db;
 use app\admin\model;
-class Cate extends Controller
+class Cate extends Common
 {
     public function add_cate(){
         if (request()->isGet()) {
@@ -24,6 +24,12 @@ class Cate extends Controller
             }else{
                 $this->error("添加失败");
             }
+        }
+    }
+    public function show_cate(){
+        if (request()->isGet()) {
+            $cate=Db::table("shop_cate")->select();
+            return view("",["cate"=>$cate]);
         }
     }
 }

@@ -25,7 +25,7 @@ class Login extends Controller
             $admin_name = request()->post("admin_name", "");
             $admin_pwd = request()->post("admin_pwd", "");
             $save = request()->post("save")?1:0;
-
+            $time=time();
             //验证值
             $data = [
                 'admin_name'  => $admin_name,
@@ -44,10 +44,12 @@ class Login extends Controller
             $admin_pwd=md5(md5($admin_pwd).$data["admin_sult"]);
             //var_dump($admin_pwd);die;
             $admin = Db::table("shop_admin")
+                ->field(["admin_id","admin_name","admin_time"])
                 ->where("admin_name", $admin_name)
                 ->where("admin_pwd", $admin_pwd)
                 ->find();
             if ($admin) {
+                Db::table("shop_admin")->where("admin_id",$admin["admin_id"])->update(["admin_time"=>$time]);
                 if($save==1){
                     Cookie::set("admin",$admin,3600);
                 }
