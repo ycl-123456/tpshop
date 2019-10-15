@@ -1,5 +1,6 @@
 <?php
 namespace app\admin\controller;
+use app\admin\model\Powermodel;
 use think\Controller;
 use think\Db;
 use think\facade\Cookie;
@@ -9,6 +10,7 @@ class Index extends Common
 {
     public function index()
     {
-        return view();
+        $admin=Db::table("shop_admin")->select();
+        return view("",["admin"=>$admin]);
     }
 }

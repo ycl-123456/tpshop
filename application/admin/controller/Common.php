@@ -12,7 +12,7 @@ class Common extends Controller{
         $session=Session::get("admin");
         if($cookie&&!$session){
             $session=$cookie;
-            Session::add("admin",$cookie);
+            Session::set("admin",$cookie);
         }
         if(!$cookie&&!$session){
             $this->success("请先登录","Login/login");

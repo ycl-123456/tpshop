@@ -26,6 +26,7 @@ class Login extends Controller
             $admin_pwd = request()->post("admin_pwd", "");
             $save = request()->post("save")?1:0;
             $time=time();
+            $admin_ip=$_SERVER["SERVER_ADDR"];
             //验证值
             $data = [
                 'admin_name'  => $admin_name,
@@ -49,7 +50,8 @@ class Login extends Controller
                 ->where("admin_pwd", $admin_pwd)
                 ->find();
             if ($admin) {
-                Db::table("shop_admin")->where("admin_id",$admin["admin_id"])->update(["admin_time"=>$time]);
+                Db::table("shop_admin")->where("admin_id",$admin["admin_id"])
+                    ->update(["admin_time"=>$time,"admin_ip"=>$admin_ip]);
                 if($save==1){
                     Cookie::set("admin",$admin,3600);
                 }

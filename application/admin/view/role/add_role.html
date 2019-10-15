@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>DouPHP 管理中心 - 添加管理员角色 </title>
+<meta name="Copyright" content="Douco Design." />
+<link href="/static/admin/index/css/public.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/static/admin/index/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/admin/index/js/global.js"></script>
+</head>
+<body>
+<div id="dcWrap">
+ <div id="dcHead">
+     {include file="/public/header"}
+<!-- dcHead 结束 -->
+     {include file="/public/left"}
+ <div id="dcMain">
+   <!-- 当前位置 -->
+<div id="urHere">DouPHP 管理中心<b>></b><strong>添加管理员角色</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+            <h3><a href="{:url('Role/show_role')}" class="actionBtn">管理员角色展示</a>添加管理员角色</h3>
+    <form action="" method="post">
+       <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+          <tr>
+             <td width="80" align="right">管理员角色名称</td>
+             <td>
+              <input type="text" name="role_name" value="" size="40" class="inpMain" />
+             </td>
+          </tr>
+           <tr>
+               <td align="right">权限选择</td>
+               <td>
+                   <table>
+                       {foreach $power as $k=>$v}
+                       {if $v['power_pid']==0}
+                       <tr power_id="{$v['power_id']}">
+                           <th>
+                               <input type="checkbox" name="power_pid[]" value="{$v['power_id']}">{$v['power_name']}
+                           </th>
+                           <td>
+                               {foreach $power as $key=>$val}
+                               {if $val['power_pid']==$v['power_id']}
+                               <input type="checkbox" name="power_pid[]" value="{$val['power_id']}">{$val['power_name']}
+                               {/if}
+                               {/foreach}
+                           </td>
+                       </tr>
+                       {/if}
+                       {/foreach}
+                   </table>
+               </td>
+           </tr>
+          <tr>
+           <td></td>
+           <td>
+            <input type="hidden" name="token" value="b9439ae8" />
+            <input type="hidden" name="admin_id" value="" />
+            <input name="submit" class="btn" type="submit" value="提交" />
+           </td>
+          </tr>
+       </table>
+    </form>
+ </div>
+ </div>
+ <div class="clear"></div>
+<div id="dcFooter">
+ <div id="footer">
+  <div class="line"></div>
+  <ul>
+   版权所有 © 2013-2015 漳州豆壳网络科技有限公司，并保留所有权利。
+  </ul>
+ </div>
+</div><!-- dcFooter 结束 -->
+<div class="clear"></div> </div>
+</body>
+</html>
