@@ -7,6 +7,26 @@
 <link href="/static/admin/index/css/public.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="/static/admin/index/js/jquery.min.js"></script>
 <script type="text/javascript" src="/static/admin/index/js/global.js"></script>
+    <script>
+        $(function() {
+            $('.parent').click(function () {
+                if ($(this).prop("checked") == true) {
+                    $(this).parent().next().children().prop("checked", "checked");
+                } else {
+                    $(this).parent().next().children().prop("checked", false);
+                }
+            });
+            $('.son').click(function () {
+                if ($(this).prop("checked") == true) {
+                    $(this).parent().prev().children().prop("checked", "checked");
+                } else {
+                    $(this).parent().prev().children().prop("checked", false);
+                }
+
+            });
+        });
+
+    </script>
 </head>
 <body>
 <div id="dcWrap">
@@ -34,12 +54,12 @@
                        {if $v['power_pid']==0}
                        <tr power_id="{$v['power_id']}">
                            <th>
-                               <input type="checkbox" name="power_pid[]" value="{$v['power_id']}">{$v['power_name']}
+                               <input type="checkbox" name="power_pid[]" class="parent" value="{$v['power_id']}">{$v['power_name']}
                            </th>
                            <td>
                                {foreach $power as $key=>$val}
                                {if $val['power_pid']==$v['power_id']}
-                               <input type="checkbox" name="power_pid[]" value="{$val['power_id']}">{$val['power_name']}
+                               <input type="checkbox" name="power_pid[]" class="son" value="{$val['power_id']}">{$val['power_name']}
                                {/if}
                                {/foreach}
                            </td>

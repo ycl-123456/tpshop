@@ -10,32 +10,17 @@
     <ul class="top">
         <li><a href="{:url('Index/index')}"><i class="home"></i><em>管理首页</em></a></li>
     </ul>
+    {foreach $left as $key=>$val}
     <ul>
-        <li><a href="system.html"><i class="system"></i><em>系统设置</em></a></li>
-        <li><a href="nav.html"><i class="nav"></i><em>自定义导航栏</em></a></li>
-        <li><a href="show.html"><i class="show"></i><em>首页幻灯广告</em></a></li>
-        <li><a href="page.html"><i class="page"></i><em>单页面管理</em></a></li>
+        <p hidden>{$url=$val.power_controller."/".$val.power_action}</p>
+        <li><a href="{:url($val.power_controller.'/'.$val.power_action)}"><i class="show"></i><em>{$val.power_name}</em></a></li>
+        {if !empty($val["son"])}
+        {foreach $val['son'] as $k=>$vo}
+        <li><a href="{:url($vo.power_controller.'/'.$vo.power_action)}"><i class="page"></i><em>{$vo.power_name}</em></a></li>
+        {/foreach}
+        {/if}
     </ul>
-    <ul>
-        <li><a href="{:url('cate/show_cate')}"><i class="productCat"></i><em>商品分类</em></a></li>
-        <li><a href="product.html"><i class="product"></i><em>商品列表</em></a></li>
-    </ul>
-    <ul>
-        <li><a href="{:url('Prand/add_prand')}"><i class="productCat"></i><em>品牌分类</em></a></li>
-        <li><a href="{:url('Prand/show_prand')}"><i class="product"></i><em>品牌列表</em></a></li>
-    </ul>
-    <ul>
-        <li><a href="{:url('Admin/show_admin')}"><i class="manager"></i><em>管理员管理</em></a></li>
-        <li><a href="{:url('Role/show_role')}"><i class="manager"></i><em>管理员角色管理</em></a></li>
-        <li><a href="{:url('Power/show_power')}"><i class="product"></i><em>权限管理</em></a></li>
-    </ul>
-    <ul class="bot">
-        <li><a href="backup.html"><i class="backup"></i><em>数据备份</em></a></li>
-        <li><a href="mobile.html"><i class="mobile"></i><em>手机版</em></a></li>
-        <li><a href="theme.html"><i class="theme"></i><em>设置模板</em></a></li>
-        <li><a href="manager.html"><i class="manager"></i><em>网站管理员</em></a></li>
-        <li><a href="manager.php?rec=manager_log"><i class="managerLog"></i><em>操作记录</em></a></li>
-    </ul>
+    {/foreach}
 </div>
 </div>
 </body>

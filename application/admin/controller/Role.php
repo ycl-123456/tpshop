@@ -30,7 +30,14 @@ class Role extends Common
         }
     }
     public function show_role(){
-        $role=Db::table("shop_role")->select();
+        $roles=new \app\admin\model\Role();
+        $role=$roles->all();
         return view("",["role"=>$role]);
+    }
+    public function del_role(){
+        echo "我是角色删除";
+    }
+    public function update_role(){
+        echo "我是角色修改";
     }
 }

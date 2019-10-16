@@ -10,7 +10,6 @@ class Index extends Common
 {
     public function index()
     {
-        $admin=Db::table("shop_admin")->select();
-        return view("",["admin"=>$admin]);
+        return view();
     }
 }

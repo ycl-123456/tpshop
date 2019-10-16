@@ -31,7 +31,11 @@
         <tr>
             <td>{$vo.role_id}</td>
             <td>{$vo.role_name}</td>
-            <td></td>
+            <td>
+                {foreach $vo->power as $k=>$v}
+                {$v->power_name}
+                {/foreach}
+            </td>
         </tr>
         {/volist}
     </table>

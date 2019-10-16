@@ -32,6 +32,7 @@
                             <td>管理员ip</td>
                             <td>最后登录的时间</td>
                             <td>管理员角色</td>
+                            <td>管理员权限</td>
                         </tr>
                         {volist name="admin" id="vo" }
                         <tr>
@@ -43,7 +44,18 @@
                             </td>
                             <td>{$vo.admin_ip}</td>
                             <td>{$vo.admin_time|date="Y-m-d H:i:s"}</td>
-                            <td>{$vo.role_name}</td>
+                            <td>
+                                {foreach $vo->role as $k=>$v}
+                                {$v->role_name}
+                                {/foreach}
+                            </td>
+                            <td>
+                                {foreach $vo->role as $k=>$v}
+                                {foreach $v->power as $k1=>$v1}
+                                {$v1->power_name},
+                                {/foreach}
+                                {/foreach}
+                            </td>
                         </tr>
                         {/volist}
                     </table>

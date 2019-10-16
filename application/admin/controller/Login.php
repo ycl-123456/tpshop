@@ -33,7 +33,6 @@ class Login extends Controller
                 'admin_pwd'  => $admin_pwd
             ];
             $validate = Validate::make([
-                'admin_name'  => 'require|length:5,15',
                 'admin_pwd'  => 'require'
             ]);
             if (!$validate->check($data)) {

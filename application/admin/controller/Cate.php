@@ -1,5 +1,6 @@
 <?php
 namespace app\admin\controller;
+use app\admin\service\CateService;
 use think\Controller;
 use think\Db;
 use app\admin\model;
@@ -7,8 +8,9 @@ class Cate extends Common
 {
     public function add_cate(){
         if (request()->isGet()) {
-            $cate=new model\Catemodel();
-            $cates=$cate->getCateAll();
+            $cateService=new CateService();
+            $cate=new model\Cate();
+            $cates=$cateService->getCateByRecursion($cate->all());
            return view("",["cate"=>$cates]);
         }
         if(request()->isPost()){
