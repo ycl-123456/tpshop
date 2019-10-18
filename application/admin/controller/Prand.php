@@ -14,24 +14,38 @@ class Prand extends Common
             return view();
         }
         if(request()->isPost()){
-            //接值
-            $data["prand_name"] = request()->post("prand_name", "");
-            $data["prand_url"] = request()->post("prand_url", "");
-            $data["prand_des"]=request()->post("prand_des","");
-            $data["prand_order"] = request()->post("prand_order", "");
-                //处理上传图片
-            $file = Request::file('prand_logo');
-            $info=$file->validate(['size'=>2048000,'ext'=>'gif,png,jpg'])->move("uploads/brand");
-            if($info) {
-                $data['prand_logo'] = request()->domain() . "/uploads/brand/" . str_replace('\\', "/", $info->getSaveName());
-            }
-            //入库
-            $prand=Db::table("shop_prand")->insert($data);
-            if($prand){
-                $this->success("添加成功","Prand/add_prand");
+            config("debug",false);
+            $data=input("post.");
+            $file=$_FILES["prand_logo"];
+            //七牛云
+            // 要上传图片的本地路径
+            $filePath = $file['tmp_name'];
+            $ext=pathinfo($file['name'],PATHINFO_EXTENSION);//后缀
+            // 上传到七牛后保存的文件名
+            $key = uniqid().".".$ext;
+            // 需要填写你的 Access Key 和 Secret Key
+            $accessKey = 'sgVBQxbasL4zKznWuPp_sfQISM0bJSyQe-bdFvVD';//你的accessKey
+            $secretKey = 'zYhP7plpB5t8LOnsxp_rePxJN5yWdnunpVC786uR';//你的secretKey
+            // 构建鉴权对象
+            $auth = new Auth($accessKey,$secretKey);
+            // 要上传的空间
+            $bucket = 'tp5shop';
+            $token = $auth->uploadToken($bucket);
+            // 初始化 UploadManager 对象并进行文件的上传
+            $uploadMgr = new UploadManager();
+            // 调用 UploadManager 的 putFile 方法进行文件的上传
+            list($ret, $err) = $uploadMgr->putFile($token, $key, $filePath);
+            if($err==null){
+                $path="http://pzcbrfqmd.bkt.clouddn.com/".$ret['key'];
+                $data['prand_logo']=$path;
+                $brand=new \app\admin\model\Prand();
+                $prand=$brand->save($data);
+                echo json_encode(["status"=>1,"msg"=>"ok"]);
             }else{
-                $this->error("添加失败");
+                echo json_encode(["status"=>0,"msg"=>"添加失败"]);
             }
+
+
         }
     }
     public function show_prand(){

@@ -9,7 +9,25 @@
 <script type="text/javascript" src="/static/admin/index/js/global.js"></script>
     <script>
         $(function () {
-
+            $("#sub").click(function() {
+                var formData = new FormData($("form[name='brand']").get(0));
+                $.ajax({
+                    type: 'post',
+                    url: "",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.status == 1) {
+                            location.href = "show_prand";
+                        }
+                        if (data.status == 0) {
+                            alert(data.msg);
+                        }
+                    }
+                })
+            });
         });
     </script>
 </head>
@@ -23,7 +41,7 @@
    <!-- 当前位置 -->
 <div id="urHere">DouPHP 管理中心<b>></b><strong>添加品牌</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
             <h3><a href="{:url('Prand/show_prand')}" class="actionBtn">品牌展示</a>添加品牌</h3>
-    <form action="" method="post" enctype="multipart/form-data">
+    <form name="brand" method="post" enctype="multipart/form-data">
        <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
           <tr>
              <td width="80" align="right">品牌名称</td>
@@ -52,15 +70,13 @@
           <tr>
             <td align="right">排序</td>
             <td>
-             <input type="text" name="cate_order" value="50" size="5" class="inpMain" />
+             <input type="text" name="prand_order" value="50" size="5" class="inpMain" />
             </td>
           </tr>
           <tr>
            <td></td>
            <td>
-            <input type="hidden" name="token" value="b9439ae8" />
-            <input type="hidden" name="cat_id" value="" />
-            <input name="submit" class="btn" type="submit" value="提交" />
+            <input name="submit" class="btn" id="sub" type="button" value="提交" />
            </td>
           </tr>
        </table>

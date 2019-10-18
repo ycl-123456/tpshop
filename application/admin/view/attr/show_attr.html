@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>DouPHP 管理中心 - 属性列表 </title>
+<meta name="Copyright" content="Douco Design." />
+<link href="/static/admin/index/css/public.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/static/admin/index/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/admin/index/js/global.js"></script>
+<script type="text/javascript" src="/static/admin/index/js/jquery.autotextarea.js"></script>
+    <script>
+
+    </script>
+</head>
+<body>
+<div id="dcWrap">
+ <div id="dcHead">
+     {include file="/public/header"}
+<!-- dcHead 结束 -->
+     {include file="/public/left"}
+ <div id="dcMain">
+   <!-- 当前位置 -->
+<div id="urHere">DouPHP 管理中心<b>></b><strong>属性列表</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+        <h3><a href="{:url('Attr/add_attr')}?type_id=1" class="actionBtn add">添加属性</a>属性列表</h3>
+        <div id="list">
+            <form action="" method="post">
+                <select name="type_id">
+                    <option value="">所有属性</option>
+                    {foreach $type as $key=>$vo}
+                    <option value="{$vo.type_id}">{$vo.type_name}</option>
+                    {/foreach}
+                </select>
+            </form>
+            <br>
+    <form name="action" method="post" action="article.php?rec=action">
+    <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+         <tr>
+              <th width="22" align="center"><input name='chkall' type='checkbox' id='chkall' onclick='selectcheckbox(this.form)' value='check'></th>
+              <th width="40" align="center">编号</th>
+              <th width="80" align="center">属性名称</th>
+              <th width="80" align="center">商品类型</th>
+              <th width="150" align="center">属性值录入方式</th>
+              <th width="80" align="center">可选值列表</th>
+              <th width="80" align="center">属性类型</th>
+              <th width="80" align="center">操作</th>
+         </tr>
+          {foreach $attr as $key=>$vo}
+         <tr>
+              <td align="center"><input type="checkbox" name="checkbox[]" value="10" /></td>
+              <td align="center">{$vo.attr_id}</td>
+              <td align="center">{$vo.attr_name}</td>
+              <td align="center">{$vo.type_name}</td>
+              <td align="center">
+                  {if $vo.attr_input_type == 0}手工录入
+                  {else}重列表中选择
+                  {/if}
+              </td>
+              <td align="center">{$vo.attr_select}</td>
+             <td align="center">{$vo.group_name}</td>
+              <td align="center">
+                      <a href="article.php?rec=edit&id=10">编辑</a> |
+                      <a href="javascript:void(0);">删除</a>
+              </td>
+         </tr>
+         {/foreach}
+    </table>
+    </form>
+    </div>
+    <div class="clear"></div>
+    <div class="pager">总计 10 个记录，共 1 页，当前第 1 页 | <a href="article.php?page=1">第一页</a> 上一页 下一页 <a href="article.php?page=1">最末页</a></div>           </div>
+ </div>
+ <div class="clear"></div>
+<div id="dcFooter">
+ <div id="footer">
+  <div class="line"></div>
+  <ul>
+   版权所有 © 2013-2015 漳州豆壳网络科技有限公司，并保留所有权利。
+  </ul>
+ </div>
+</div><!-- dcFooter 结束 -->
+<div class="clear"></div> </div>
+ <script type="text/javascript">
+ 
+ onload = function()
+ {
+   document.forms['action'].reset();
+ }
+
+ function douAction()
+ {
+     var frm = document.forms['action'];
+
+     frm.elements['new_cat_id'].style.display = frm.elements['action'].value == 'category_move' ? '' : 'none';
+ }
+ 
+ </script>
+</body>
+</html>

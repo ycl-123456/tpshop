@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+{extend name="public:public"}
+<head>
+    {block name="head"}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>DouPHP 管理中心 - 添加属性 </title>
+    <meta name="Copyright" content="Douco Design." />
+    <link href="/static/admin/index/css/public.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="/static/admin/index/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/admin/index/js/global.js"></script>
+    <script>
+        $(function(){
+            $("select[name='type_id'] option").click(function(){
+                 var type_id=$(this).val();
+                $.ajax({
+                    type: "get",
+                    url: "{:url('ajax')}",
+                    dataType: "json",
+                    data: {
+                        type_id: type_id
+                    },
+                    success:function(data){
+                        html="";
+                        if(data.status == 1){
+
+
+                            html+="<td align='right'>类型组名</td>";
+                            html+="<td>";
+                            html+="<select name='group_name'>";
+                            $.each(data.type_groups, function (k, v){
+                                html+="<option value='"+v+"'>"+v+"</option>"
+                            });
+                            html+="</select></td>"
+                        }
+                        $(".aa").html(html);
+                    }
+                })
+            });
+            $("input[name=attr_input_type]").change(function(){
+                var type=$(this).val();
+                if(type==0){
+                    $("textarea[name=attr_select]").prop("disabled",true);
+                }else{
+                    $("textarea[name=attr_select]").prop("disabled",false);
+                }
+            })
+        });
+    </script>
+    {/block}
+</head>
+<body>
+{block name="div"}
+<div id="dcWrap">
+    <div id="dcHead">
+{/block}
+<!-- dcHead 结束 -->
+{block name="main"}
+<div id="dcMain">
+    <!-- 当前位置 -->
+    <div id="urHere">DouPHP 管理中心<b>></b><strong>添加属性</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+    <h3><a href="{:url('show_attr')}" class="actionBtn">属性展示</a>添加属性</h3>
+    <form action="" method="post">
+        <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+            <tr>
+                <td width="80" align="right">属性名称</td>
+                <td>
+                    <input type="text" name="attr_name" value="" size="40" class="inpMain" />
+                </td>
+            </tr>
+            <tr>
+            <td align="right">所属商品类型</td>
+            <td>
+                <select name="type_id">
+                    <option>请选择类型</option>
+                    {foreach $type as $key=>$vo}
+                    <option class="type" value="{$vo.type_id}">{$vo.type_name}</option>
+                    {/foreach}
+                </select>
+            </td>
+        </tr>
+            <tr class="aa">
+            </tr>
+            <tr>
+                <td>属性类型</td>
+                <td>
+                    <input type="radio" name="attr_type" checked="true" value="0" onclick="radioClicked(0)"> 参数
+                    <input type="radio" name="attr_type" value="1" onclick="radioClicked(1)"> 规格
+                </td>
+            </tr>
+            <tr>
+                <td>该属性值的录入方式</td>
+                <td>
+                    <input type="radio" name="attr_input_type" checked="true" value="0" onclick="radioClicked(0)"> 手工录入
+                    <input type="radio" name="attr_input_type" value="1" onclick="radioClicked(1)"> 从下面单选框中选择
+                </td>
+            </tr>
+            <tr class="textarea">
+                <td align="right">可选值列表</td>
+                <td>
+                    <textarea name="attr_select" cols="60" disabled="true" rows="4" class="textArea"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="hidden"  value="" />
+                    <input  class="btn" type="submit" value="提交" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</div>
+{/block}
+{block name="footer"}
+<div class="clear"></div>
+<div id="dcFooter">
+    <div id="footer">
+        <div class="line"></div>
+        <ul>
+            版权所有 © 2013-2015 漳州豆壳网络科技有限公司，并保留所有权利。
+        </ul>
+    </div>
+</div><!-- dcFooter 结束 -->
+<div class="clear"></div> </div>
+{/block}
+</body>
+</html>

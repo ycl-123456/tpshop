@@ -1,5 +1,6 @@
 <?php
 namespace app\admin\controller;
+use app\admin\model\Attr;
 use think\Db;
 
 class Type extends Common

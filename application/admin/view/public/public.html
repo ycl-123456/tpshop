@@ -2,6 +2,13 @@
 <html>
 <head>
     {block name="head"}标题{/block}
+    <script>
+        $(function(){
+            $(".dianji").click(function(){
+                $(".selector").toggle();
+            });
+        });
+    </script>
 </head>
 <body>
     {block name="div"}div{/block}
@@ -37,10 +44,10 @@
         </ul>
         {foreach $left as $key=>$val}
         <ul>
-            <li><a href="{:url($val.power_controller.'/'.$val.power_action)}"><i class="show"></i><em>{$val.power_name}</em></a></li>
+            <li class="dianji"><a href="javascript:void(0);"><i class="show"></i><em>{$val.power_name}</em></a></li>
             {if !empty($val["son"])}
             {foreach $val.son as $k=>$vo}
-            <li><a href="{:url($vo.power_controller.'/'.$vo.power_action)}"><i class="page"></i><em>{$vo.power_name}</em></a></li>
+            <li class="selector"><a href="{:url($vo.power_controller.'/'.$vo.power_action)}"><i class="page"></i><em>{$vo.power_name}</em></a></li>
             {/foreach}
             {/if}
         </ul>

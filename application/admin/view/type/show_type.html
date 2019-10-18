@@ -27,20 +27,18 @@
                 <form name="action" method="post">
                     <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
                         <tr>
-                            <td>商品类型名称</td>
-                            <td>属性分组</td>
-                            <td>属性数</td>
-                            <td>状态</td>
-                            <td>操作</td>
+                            <td align="center">商品类型名称</td>
+                            <td align="center">属性分组</td>
+                            <td align="center">属性数</td>
+                            <td align="center">操作</td>
                         </tr>
                         {foreach $type as $key=>$vo}
                         <tr>
-                            <td>{$vo.type_name}</td>
-                            <td>{$vo.type_group}</td>
-                            <td></td>
-                            <td></td>
+                            <td align="center">{$vo.type_name}</td>
+                            <td align="center">{$vo.type_group}</td>
+                            <td align="center">{$vo.attr_num}</td>
                             <td align="center">
-                                <a href="">属性列表</a> |
+                                <a href="{:url('Attr/show_attr')}">属性列表</a> |
                                 <a href="">编辑</a> |
                                 <a href="javascript:void(0);" name="prand_id"  class="brand_del">删除</a>
                             </td>
