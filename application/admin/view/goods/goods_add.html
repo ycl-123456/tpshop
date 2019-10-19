@@ -1,0 +1,356 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<!--日期引入-->
+	{load href="/static/date/jquery-1.11.0.min.js" /}
+	{load href="/static/date/jquery-ui.css" /}
+	{load href="/static/date/jquery-ui-1.10.4.custom.min.js" /}
+	{load href="/static/date/jquery.ui.datepicker-zh-CN.js" /}
+	{load href="/static/date/jquery-ui-timepicker-addon.js" /}
+	{load href="/static/date/jquery-ui-timepicker-zh-CN.js" /}
+	<!--日期引入结束-->
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<title></title>
+	<link href="/static/admin/ecshop/styles/general.css" rel="stylesheet" type="text/css" />
+	<link href="/static/admin/ecshop/styles/main.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="/static/admin/ecshop/js/utils.js"></script>
+	<script type="text/javascript" src="/static/admin/ecshop/js/selectzone.js"></script>
+	<script type="text/javascript" src="/static/admin/ecshop/js/colorselector.js"></script>
+	<script type="text/javascript" src="/static/admin/ecshop/js/calendar.php?lang="></script>
+	<script>
+		$(function(){
+			//商品属性
+			$("select[name='type_id'] option").click(function(){
+				var type_id=$(this).val();
+				$.ajax({
+					type: "get",
+					url: "{:url('ajax')}",
+					dataType: "json",
+					data: {
+						type_id: type_id
+					},
+					success:function(data){
+						html="";
+						if(data.status==1){
+							$.each(data.attr, function (k, v){
+								if(v.attr_input_type==0){
+									if(v.attr_type==0){
+										html+="<tr>";
+										html+="<td class='label'><a href='javascript:void(0);' class='clone'>[+]</a>"+ v.attr_name+"</td>";
+										html+="<td>";
+										html+="<input name='attr_value_list'type='text' size='40'>";
+										html+="属性价格 <input type='text' name='attr_price_list[]' value='' size='5' maxlength='10'>";
+										html+="</td>";
+										html+="</tr>";
+									}else{
+										html+="<tr>";
+										html+="<td class='label'>"+ v.attr_name+"</td>";
+										html+="<td>";
+										html+="<input name='attr_value_list'type='text' size='40'>";
+										html+="</td>";
+										html+="</tr>";
+									}
+
+								}else{
+									html+="<tr>";
+									html+="<td class='label'>"+ v.attr_name+"</td>";
+									html+="<td>";
+									html+="<select name='attr_value_list'>";
+									html+="<option value='0'>请选择...</option>";
+									$.each(v.attr_select, function(key,vo){
+										html+="<option value=''>"+vo+"</option>";
+									});
+									html+="</select>";
+									html+="</td>";
+									html+="</tr>";
+
+								}
+
+							});
+							$(".aa").html(html);
+						}
+
+					}
+				})
+			});
+			//促销价格日期
+			$("#is_promote").change(function(){
+				var type=$(this).val();
+				$(this).val(0);
+				if(type==0){
+					$(this).val(1);
+					$(".text-box").prop("disabled",false);
+				}else{
+					$(".text-box").prop("disabled",true);
+				}
+			});
+			//自动生成缩略图
+			$("#auto_thumb").change(function(){
+				var type=$(this).val();
+				$(this).val(0);
+				if(type==0){
+					$(this).val(1);
+					$("input[name='goods_simg']").prop("disabled",true);
+				}else{
+					$("input[name='goods_simg']").prop("disabled",false);
+				}
+			});
+			//
+			$(document).on("click",".clone",function(){
+				var a=$(this).parents("tr").first().clone();
+				a.find("a").html("[-]").attr("class","delete");
+				a.insertAfter($(this).parents("tr").first());//复制当前点击的节点，并将它追加到《ul》元素中，当添加参数时复制它的事件
+			});
+			$(document).on("click",".delete",function(){
+				$(this).parents("tr").first().remove();
+				//复制当前点击的节点，并将它追加到《ul》元素中，当添加参数时复制它的事件
+			});
+		});
+	</script>
+</head>
+<body>
+<h1>
+	<span class="action-span"><a href="goods.php?act=list">商品列表</a></span>
+	<span class="action-span1"><a href="{:url('Index/index')}">SHOP 管理中心 </a> </span><span id="search_id" class="action-span1"> - 编辑商品信息 </span>
+	<div style="clear:both"></div>
+</h1>
+
+<div class="tab-div">
+    <!-- tab bar -->
+    <div id="tabbar-div">
+      <p>
+        <span class="tab-front" id="general-tab">通用信息</span>
+		<span class="tab-back" id="mix-tab">其他信息</span>
+		<span class="tab-back" id="properties-tab">商品属性</span>
+		<span class="tab-back" id="gallery-tab">商品相册</span>
+      </p>
+    </div>
+
+    <!-- tab body -->
+    <div id="tabbody-div">
+      <form enctype="multipart/form-data" action="" method="post" name="theForm">
+		 <!-- 通用信息 -->
+        <table width="90%" id="general-table" align="center" style="display: table;">
+			<tbody>
+				<tr>
+					<td class="label">商品名称：</td>
+					<td><input type="text" name="goods_name" size="30"><span class="require-field">*</span></td>
+				</tr>
+				<tr>
+					<td class="label">商品货号： </td>
+					<td><input type="text" name="goods_sn" size="20" onblur="checkGoodsSn(this.value,'32')"><span id="goods_sn_notice"></span><br>
+					<span class="notice-span" style="display:block" id="noticeGoodsSN">如果您不输入商品货号，系统将自动生成一个唯一的货号。</span></td>
+			</tr>
+			<tr>
+				<td class="label">商品分类：</td>
+				<td>
+					<select name="cate_id" onchange="hideCatDiv()">
+						<option value="0">请选择...</option>
+						{foreach $cate as $key=>$vo}
+						<option value="{$vo.cate_id}">{$vo.cate_name}</option>
+						{/foreach}
+					</select>
+					<a href="{:url('Cate/add_cate')}" class="button">添加分类</a>
+                 </td>
+			</tr>
+			<tr>
+				<td class="label">商品品牌：</td>
+				<td>
+					<select name="prand_id" onchange="hideBrandDiv()">
+						<option value="0">请选择...</option>
+						{foreach $prand as $key=>$vo}
+						<option value="{$vo.prand_id}">{$vo.prand_name}</option>
+						{/foreach}
+					</select>
+					<a href="{:url('Prand/add_prand')}">添加品牌</a>
+				</td>
+			</tr>
+            <tr>
+				<td class="label">本店售价：</td>
+				<td><input type="text" name="goods_price" size="20" onblur="priceSetted()">
+				<span class="require-field">*</span></td>
+			</tr>
+			<tr>
+            <td class="label">会员价格：</td>
+            <td><input type="text" name="goods_vip_price"  size="20" onblur="priceSetted()"></td>
+          </tr>
+
+          <tr>
+            <td class="label">市场售价：</td>
+            <td><input type="text" name="market_price"  size="20"></td>
+          </tr>
+          <tr>
+            <td class="label">
+				<label for="is_promote">
+				<input type="checkbox" id="is_promote" value="1" checked="checked" onclick="handlePromote(this.checked);"> 促销价：</label>
+			</td>
+            <td id="promote_3"><input type="text" id="promote_1" class="text-box" name="promote_price"  size="20"></td>
+          </tr>
+          <tr id="promote_4">
+            <td class="label" id="promote_5">促销日期：</td>
+            <td id="promote_6">
+				<input name="act_start_time" type="text" class="text-box" value="" placeholder="开始时间≥当前时间" title="开始时间≥当前时间" readonly="readonly" style="cursor:pointer;"/>
+				<input name="act_stop_time" type="text" class="text-box" value="" placeholder="结束时间>开始时间" title="结束时间>开始时间" readonly="readonly" style="cursor:pointer;"/>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">上传商品图片：</td>
+            <td>
+              <input type="file" name="goods_img" size="35">
+            </td>
+          </tr>
+          <tr id="auto_thumb_1">
+            <td class="label"> 上传商品缩略图：</td>
+            <td id="auto_thumb_3">
+              <input type="file" name="goods_simg" size="35" class="">
+			<br><label for="auto_thumb">
+				<input type="checkbox" id="auto_thumb" checked="true" value="1" onclick="handleAutoThumb(this.checked)">自动生成商品缩略图</label>
+			</td>
+          </tr>
+        </tbody>
+		</table>
+
+        <!-- 其他信息 -->
+        <table width="90%" id="mix-table" style="display: none;" align="center">
+                    <tbody><tr>
+            <td class="label">商品重量：</td>
+            <td><input type="text" name="goods_weight" size="20"></td>
+          </tr>
+	      <tr>
+            <td class="label"><a href="javascript:showNotice('noticeStorage');" title="点击此处查看提示信息">
+				<img src="/static/admin/ecshop/images/notice.gif" width="16" height="16" border="0" alt="点击此处查看提示信息"></a>
+				商品库存数量：</td>
+            <td><input type="text" name="goods_number" size="20"><br>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">库存警告数量：</td>
+            <td><input type="text" name="goods_jnumber" size="20"></td>
+          </tr>
+		  <tr>
+            <td class="label">加入推荐：</td>
+            <td><input type="checkbox" name="is_best" value="1" checked="checked">精品
+				<input type="checkbox" name="is_new" value="1" checked="checked">新品
+				<input type="checkbox" name="is_hot" value="1" checked="checked">热销</td>
+          </tr>
+          <tr id="alone_sale_1">
+            <td class="label" id="alone_sale_2">上架：</td>
+            <td id="alone_sale_3">
+				<input type="checkbox" name="is_on_sale" value="1" checked="checked"> 打勾表示允许销售，否则不允许销售。</td>
+          </tr>
+          <tr>
+            <td class="label">是否为免运费商品</td>
+            <td><input type="checkbox" name="goods_farce" value="1"> 打勾表示此商品不会产生运费花销，否则按照正常运费计算。</td>
+          </tr>
+          <tr>
+            <td class="label">商品关键词：</td>
+            <td><input type="text" name="goods_key" size="40"> 用,分隔</td>
+          </tr>
+			<tr>
+				<td class="label">商品描述：</td>
+				<td><textarea name="goods_content" cols="40" rows="3"></textarea></td>
+			</tr>
+          <tr>
+            <td class="label">商品简单描述：</td>
+            <td><textarea name="goods_brief" cols="40" rows="3"></textarea></td>
+          </tr>
+          <tr>
+            <td class="label">
+            <img src="/static/admin/ecshop/images/notice.gif" width="16" height="16" border="0" alt="点击此处查看提示信息"></a> 商家备注： </td>
+            <td><textarea name="goods_beizhu" cols="40" rows="3"></textarea><br>
+            <span class="notice-span" style="display:block" id="noticeSellerNote">仅供商家自己看的信息</span></td>
+          </tr>
+        </tbody>
+		</table>
+
+        <!-- 商品属性 -->
+         <table width="90%" id="properties-table" style="display: none;" align="center">
+			<tbody>
+				<tr>
+					<td class="label">商品类型：</td>
+					<td>
+						<select name="type_id" onchange="getAttrList(32)">
+							<option value="0">请选择商品类型</option>
+							{foreach $type as $key=>$vo}
+							<option value="{$vo.type_id}">{$vo.type_name}</option>
+							{/foreach}
+						</select><br>
+						<span class="notice-span" style="display:block" id="noticeGoodsType">请选择商品的所属类型，进而完善此商品的属性</span>
+					</td>
+				</tr>
+				<tr>
+				<td id="tbody-goodsAttr" colspan="2" style="padding:0">
+					<table width="100%" id="attrTable">
+						<tbody class="aa">
+
+						</tbody>
+					</table>
+				</td>
+			 </tr>
+        </tbody>
+	</table>
+        
+        <!-- 商品相册 -->
+        <table width="90%" id="gallery-table" style="display: none;" align="center">
+          <tbody><tr>
+            <td>
+				<div id="gallery_41" style="float:left; text-align:center; border: 1px solid #DADADA; margin: 4px; padding:2px;">
+                <a href="javascript:;" onclick="if (confirm('您确实要删除该图片吗？')) dropImg('41')">[-]</a><br>
+                <a href="" target="_blank">
+                <img src="" width="100" height="100" border="0">
+                </a><br>
+                <input type="text" value="" size="15" name="old_img_desc[41]">
+              </div>
+                          </td>
+          </tr>
+          <tr><td>&nbsp;</td></tr>
+          <tr>
+            <td>
+              <a href="javascript:;" onclick="addImg(this)">[+]</a>
+              上传文件 <input type="file" name="img_url[]">
+            </td>
+          </tr>
+        </tbody></table>
+        <div class="button-div">
+          <input type="hidden" name="goods_id" value="32">
+		  <input type="submit" value=" 确定 " class="button" onclick="validate('32')">
+          <input type="reset" value=" 重置 " class="button">
+        </div>
+      </form>
+
+    </div>
+</div>
+<div id="footer">
+	版权所有 &copy; 2006-2013 
+</div>
+<script type="text/javascript">$( "input[name='act_start_time'],input[name='act_stop_time']" ).datetimepicker();</script>
+<script type="text/javascript" src="/static/admin/ecshop/js/tab.js"></script>
+<script type="text/javascript">
+	function addImg(obj){
+      var src  = obj.parentNode.parentNode;
+      var idx  = rowindex(src);
+      var tbl  = document.getElementById('gallery-table');
+      var row  = tbl.insertRow(idx + 1);
+      var cell = row.insertCell(-1);
+      cell.innerHTML = src.cells[0].innerHTML.replace(/(.*)(addImg)(.*)(\[)(\+)/i, "$1removeImg$3$4-");
+  	}
+
+    function removeImg(obj){
+      var row = rowindex(obj.parentNode.parentNode);
+      var tbl = document.getElementById('gallery-table');
+      tbl.deleteRow(row);
+  	}
+
+   	function dropImg(imgId){
+    	Ajax.call('goods.php?is_ajax=1&act=drop_image', "img_id="+imgId, dropImgResponse, "GET", "JSON");
+  	}
+
+  	function dropImgResponse(result){
+      if (result.error == 0){
+          document.getElementById('gallery_' + result.content).style.display = 'none';
+      }
+  	}
+
+</script>
+</body>
+</html>
