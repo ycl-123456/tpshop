@@ -36,29 +36,29 @@
 								if(v.attr_input_type==0){
 									if(v.attr_type==0){
 										html+="<tr>";
-										html+="<td class='label'><a href='javascript:void(0);' class='clone'>[+]</a>"+ v.attr_name+"</td>";
+										html+="<td class='label'><a href='javascript:void(0);' class='clone'>[+]</a><input type='hidden' name='attr_id[]' value='"+ v.attr_id+"'><input type='hidden' name='attr_name[]' value='"+ v.attr_name+"'>"+ v.attr_name+"</td>";
 										html+="<td>";
-										html+="<input name='attr_value_list'type='text' size='40'>";
-										html+="属性价格 <input type='text' name='attr_price_list[]' value='' size='5' maxlength='10'>";
+										html+="<input name='attr_value[]'type='text' size='40'>";
+										html+="属性价格 <input type='text' name='attr_price[]' value='' size='5' maxlength='10'>";
 										html+="</td>";
 										html+="</tr>";
 									}else{
 										html+="<tr>";
-										html+="<td class='label'>"+ v.attr_name+"</td>";
+										html+="<td class='label'><input type='hidden' name='attr_id[]' value='"+ v.attr_id+"'><input type='hidden' name='attr_name[]' value='"+ v.attr_name+"'>"+ v.attr_name+"</td>";
 										html+="<td>";
-										html+="<input name='attr_value_list'type='text' size='40'>";
+										html+="<input name='attr_value[]' type='text' size='40'>";
 										html+="</td>";
 										html+="</tr>";
 									}
 
 								}else{
 									html+="<tr>";
-									html+="<td class='label'>"+ v.attr_name+"</td>";
+									html+="<td class='label'><input type='hidden' name='attr_id[]' value='"+ v.attr_id+"'><input type='hidden' name='attr_name[]' value='"+ v.attr_name+"'>"+ v.attr_name+"</td>";
 									html+="<td>";
-									html+="<select name='attr_value_list'>";
-									html+="<option value='0'>请选择...</option>";
+									html+="<select name='attr_value[]'>";
+									html+="<option value=''>请选择...</option>";
 									$.each(v.attr_select, function(key,vo){
-										html+="<option value=''>"+vo+"</option>";
+										html+="<option value='"+vo+"'>"+vo+"</option>";
 									});
 									html+="</select>";
 									html+="</td>";
@@ -110,7 +110,7 @@
 </head>
 <body>
 <h1>
-	<span class="action-span"><a href="goods.php?act=list">商品列表</a></span>
+	<span class="action-span"><a href="{:url('goods_show')}">商品列表</a></span>
 	<span class="action-span1"><a href="{:url('Index/index')}">SHOP 管理中心 </a> </span><span id="search_id" class="action-span1"> - 编辑商品信息 </span>
 	<div style="clear:both"></div>
 </h1>
@@ -292,27 +292,16 @@
         
         <!-- 商品相册 -->
         <table width="90%" id="gallery-table" style="display: none;" align="center">
-          <tbody><tr>
-            <td>
-				<div id="gallery_41" style="float:left; text-align:center; border: 1px solid #DADADA; margin: 4px; padding:2px;">
-                <a href="javascript:;" onclick="if (confirm('您确实要删除该图片吗？')) dropImg('41')">[-]</a><br>
-                <a href="" target="_blank">
-                <img src="" width="100" height="100" border="0">
-                </a><br>
-                <input type="text" value="" size="15" name="old_img_desc[41]">
-              </div>
-                          </td>
-          </tr>
+          <tbody>
           <tr><td>&nbsp;</td></tr>
           <tr>
             <td>
               <a href="javascript:;" onclick="addImg(this)">[+]</a>
-              上传文件 <input type="file" name="img_url[]">
+              上传文件 <input type="file" name="image_img[]">
             </td>
           </tr>
         </tbody></table>
         <div class="button-div">
-          <input type="hidden" name="goods_id" value="32">
 		  <input type="submit" value=" 确定 " class="button" onclick="validate('32')">
           <input type="reset" value=" 重置 " class="button">
         </div>
